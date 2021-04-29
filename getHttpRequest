@@ -1,3 +1,8 @@
 function getRequest(){
-        cat $line | grep -nEa 'HTTP\/1\.1.+' | cut -d ':' -f 1 | xargs -I @ sh -c "head -n @ waste | awk '{ if (NR==@) { sub(/HTTP.*/, \"\"); print } else {print } }' > $1_dup"; mv $1_dup $1
+        list=`ls $1`
+        for line in $list; do
+                touch ${line}dup
+                cat $line | grep -nEa 'HTTP\/1\.1.+' | cut -d ':' -f 1 | xargs -I @ sh -c "head -n @ $line | awk '{ if (NR==@) { sub(/HTTP.*/, \"\"); print } else {print } }' > ${line}dup"
+                mv ${line}dup $line;
+        done
 }
